@@ -4,3 +4,6 @@ spring:
     url: jdbc:h2:mem:localhost;DB_CLOSE_ON_EXIT=FALSE
     username: admin
     password:
+
+server:
+  port : 17641
