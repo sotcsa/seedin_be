@@ -5,7 +5,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,5 +18,11 @@ public class MyUserDetailsService implements UserDetailsService {
         String password = "foo";
         List<? extends GrantedAuthority> authorities = new ArrayList<>();
         return new User(username, password, authorities);
+    }
+
+    public UserDetails loadUserByEthAddress(String publicAddress) throws UsernameNotFoundException {
+        String password = "";
+        List<? extends GrantedAuthority> authorities = new ArrayList<>();
+        return new User(publicAddress, password, authorities);
     }
 }
