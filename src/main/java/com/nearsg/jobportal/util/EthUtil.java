@@ -1,5 +1,6 @@
 package com.nearsg.jobportal.util;
 
+import com.nearsg.jobportal.model.EthAuthenticationRequest;
 import org.web3j.crypto.ECDSASignature;
 import org.web3j.crypto.Hash;
 import org.web3j.crypto.Keys;
@@ -11,13 +12,18 @@ import java.math.BigInteger;
 import java.util.Arrays;
 
 public class EthUtil {
+
     private static final String PERSONAL_MESSAGE_PREFIX = "\u0019Ethereum Signed Message:\n";
-    private static final String MESSAGE = "Please sign this message for authentication on the postal";
+    private static final String MESSAGE = "Please sign this message for authentication on the Career Portal.\nYour special nonce: ";
 
+    public static boolean verifyAddressFromSignature(EthAuthenticationRequest authenticationRequest, String nonce) {
+        return verifyAddressFromSignature(authenticationRequest.getPublicAddress(), authenticationRequest.getSignature(), nonce);
+    }
 
-    private static boolean verifyAddressFromSignature(String address, String signature) {
-        String prefix = PERSONAL_MESSAGE_PREFIX + MESSAGE.length();
-        byte[] msgHash = Hash.sha3((prefix + MESSAGE).getBytes());
+    public static boolean verifyAddressFromSignature(String address, String signature, String nonce) {
+        String message = MESSAGE + nonce;
+        String prefix = PERSONAL_MESSAGE_PREFIX + message.length();
+        byte[] msgHash = Hash.sha3((prefix + message).getBytes());
 
         byte[] signatureBytes = Numeric.hexStringToByteArray(signature);
         byte v = signatureBytes[64];
@@ -55,11 +61,4 @@ public class EthUtil {
 
         return match;
     }
-
-//    public static void main(String[] args) {
-//        String address = "0x7eCFce95576a29671B726CC59413eBffD53032ee";
-//        String signature = "0x7bdaf62be99ac912904e5ecc4a7fd5e60cd36719415243ddfe0879ae1c59b8227260dc5414525f8045d7038d69533ae800004bcfe066a7a49255aa5a34a1252d1b";
-//        String pkey = "0x403347ead2490dd6128cb2323ce68d5e9c085ffc54693e7567036db1d34721c2";
-//        System.out.println(EthUtil.verifyAddressFromSignature(address, signature));
-//    }
 }

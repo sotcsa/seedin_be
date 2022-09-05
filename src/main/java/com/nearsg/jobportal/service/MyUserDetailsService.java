@@ -13,13 +13,27 @@ import java.util.List;
 @Service
 public class MyUserDetailsService implements UserDetailsService {
 
+    /**
+     * TODO need to refactor, dummy implementation
+     *
+     * @param username
+     * @return UserDetails
+     * @throws UsernameNotFoundException
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        String password = "foo";
+        String password = "";
         List<? extends GrantedAuthority> authorities = new ArrayList<>();
         return new User(username, password, authorities);
     }
 
+    /**
+     * TODO need to refactor, dummy implementation
+     *
+     * @param publicAddress
+     * @return UserDetails
+     * @throws UsernameNotFoundException
+     */
     public UserDetails loadUserByEthAddress(String publicAddress) throws UsernameNotFoundException {
         String password = "";
         List<? extends GrantedAuthority> authorities = new ArrayList<>();
