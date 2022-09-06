@@ -1,0 +1,48 @@
+// open here: https://dbdiagram.io/d
+Table users as U {
+    id uuid [pk]
+    eth_address varchar
+    near_address varchar
+    "created at" varchar
+    Indexes {
+        id [pk]
+        eth_address
+        near_address
+    }
+}
+
+Table user_badges as B {
+  id int [pk, increment] // auto-increment
+  user_id int [ref: > U.id]
+  address varchar
+  category_id badge_category
+  Indexes {
+      id [pk]
+  }
+}
+
+Enum badge_category {
+  poap
+  endorsement [note: 'Certificate of Attendance/Achievement/Award']
+  experience [note: 'job/work']
+  personal_artworks
+}
+
+Table company as C {
+  id int [pk, increment] // auto-increment
+  name varchar
+  Indexes {
+      id [pk]
+  }
+}
+
+Table jobs as J {
+  id int [pk, increment] // auto-increment
+  title varchar
+  description varchar
+  company_id int [ref: > C.id]
+  Indexes {
+      id [pk]
+  }
+}
+
