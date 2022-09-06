@@ -48,5 +48,13 @@ Response: JSON with jwt field (Json Web Token)
 }
 ```
 
+Frontend needs to construct the message (see bellow) and ask user to sign this message with MetaMask.
+
+Here is an example node code:
+```javascript
+let msg = 'Please sign this message for authentication on the Career Portal.\nYour special nonce: ' + nonce
+s = web3.eth.accounts.sign(msg, privKey);
+```
+
 Backend does the signed message validation, and generates for the frontend  a JWT with 1 hour expiry time
 
