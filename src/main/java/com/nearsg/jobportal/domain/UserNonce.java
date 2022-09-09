@@ -16,8 +16,8 @@ import javax.persistence.Id;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserNonce {
     @Id private String address;
-    private String account;
     private String nonce;
+    private String account;
 
     public void UserNonce(String address, String nonce) {
         this.address = address;
