@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,6 +13,8 @@ import java.util.List;
 
 @Service
 public class MyUserDetailsService implements UserDetailsService {
+
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     /**
      * TODO need to refactor, dummy implementation
@@ -22,9 +25,7 @@ public class MyUserDetailsService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        String password = "";
-        List<? extends GrantedAuthority> authorities = new ArrayList<>();
-        return new User(username, password, authorities);
+        return loadUserByEthAddress(username);
     }
 
     /**
@@ -35,8 +36,7 @@ public class MyUserDetailsService implements UserDetailsService {
      * @throws UsernameNotFoundException
      */
     public UserDetails loadUserByEthAddress(String publicAddress) throws UsernameNotFoundException {
-        String password = "";
         List<? extends GrantedAuthority> authorities = new ArrayList<>();
-        return new User(publicAddress, password, authorities);
+        return new User(publicAddress, encoder.encode(""), authorities);
     }
 }
