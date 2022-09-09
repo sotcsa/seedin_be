@@ -1,4 +1,4 @@
-// open here: https://dbdiagram.io/d
+// open here: https://dbdiagram.io/d/63158b620911f91ba535094c
 Table users as U {
     id uuid [pk]
     eth_address varchar
@@ -11,14 +11,41 @@ Table users as U {
     }
 }
 
-Table user_badges as B {
+Table nonce {
+  address varchar [pk] // eth accounnt address or near accey key publilc address
+  account varchar
+  nonce varchar
+}
+
+// do we need add user-editable badge description in this table?
+// or we have a saparate table to sotre all user-editable badge related info
+// Re: good point, some options - what do you prefer?:
+// Op1. create a table for key-values
+// Op2. store as JSON in one field iin B.additional_metadata
+Table badge as B {
   id int [pk, increment] // auto-increment
   user_id int [ref: > U.id]
-  address varchar
+  nft_id int [ref: > nft.id]
   category_id badge_category
+  description varchar
+  addiitional_metadata text // JSON: store any attribute by user and seriallise into JSON
+  visible boolean // default: true
   Indexes {
       id [pk]
   }
+}
+
+Table nft {
+  id int [pk, increment] // auto-increment
+  address varchar
+  network network
+  chain_id int
+  metadata_cache text // raw json metadata from blockchain
+}
+
+Enum network {
+  near
+  ethereum
 }
 
 Enum badge_category {
@@ -28,21 +55,22 @@ Enum badge_category {
   personal_artworks
 }
 
-Table company as C {
-  id int [pk, increment] // auto-increment
-  name varchar
-  Indexes {
-      id [pk]
-  }
-}
+// let's focus on badge topic first
+// Table company as C {
+//   id int [pk, increment] // auto-increment
+//   name varchar
+//   Indexes {
+//       id [pk]
+//   }
+// }
 
-Table jobs as J {
-  id int [pk, increment] // auto-increment
-  title varchar
-  description varchar
-  company_id int [ref: > C.id]
-  Indexes {
-      id [pk]
-  }
-}
+// Table job as J {
+//   id int [pk, increment] // auto-increment
+//   title varchar
+//   description varchar
+//   company_id int [ref: > C.id]
+//   Indexes {
+//       id [pk]
+//   }
+// }
 

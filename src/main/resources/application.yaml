@@ -4,9 +4,12 @@ spring:
     url: jdbc:h2:mem:localhost;DB_CLOSE_ON_EXIT=FALSE
     username: admin
     password:
+  mvc:
+    pathmatch:
+      matching-strategy: "ant_path_matcher"
 
 server:
-  port : 17641
+  port: 17641
 
 jwt:
   secretkey: V3ryS3cr3t
@@ -15,7 +18,7 @@ jwt:
 logging:
   level:
     org.springframework: ERROR
-    com.mkyong: DEBUG
+    com.nearsg.jobportal: DEBUG
   pattern:
     console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
     file: "%d %p %c{1.} [%t] %m%n"

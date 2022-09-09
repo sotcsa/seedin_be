@@ -2,7 +2,6 @@ plugins {
 	id 'org.springframework.boot' version '2.7.3'
 	id 'io.spring.dependency-management' version '1.0.13.RELEASE'
 	id 'java'
-	id 'war'
 }
 
 group = 'com.near-sg'
@@ -20,18 +19,19 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	annotationProcessor 'org.projectlombok:lombok'
+	compileOnly 'org.projectlombok:lombok'
+	implementation 'com.h2database:h2'
 	implementation 'commons-codec:commons-codec:1.13'
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	implementation 'org.springdoc:springdoc-openapi-ui:1.6.4'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.web3j:core:4.2.0'
-	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+	implementation 'software.pando.crypto:salty-coffee:1.1.0'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-	implementation 'com.h2database:h2'
 }
 
 tasks.named('test') {

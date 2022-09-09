@@ -1,6 +1,6 @@
 package com.nearsg.jobportal.util;
 
-import com.nearsg.jobportal.model.EthAuthenticationRequest;
+import com.nearsg.jobportal.model.AuthenticationRequest;
 import org.web3j.crypto.ECDSASignature;
 import org.web3j.crypto.Hash;
 import org.web3j.crypto.Keys;
@@ -16,7 +16,7 @@ public class EthUtil {
     private static final String PERSONAL_MESSAGE_PREFIX = "\u0019Ethereum Signed Message:\n";
     private static final String MESSAGE = "Please sign this message for authentication on the Career Portal.\nYour special nonce: ";
 
-    public static boolean verifyAddressFromSignature(EthAuthenticationRequest authenticationRequest, String nonce) {
+    public static boolean verifyAddressFromSignature(AuthenticationRequest authenticationRequest, String nonce) {
         return verifyAddressFromSignature(authenticationRequest.getPublicAddress(), authenticationRequest.getSignature(), nonce);
     }
 

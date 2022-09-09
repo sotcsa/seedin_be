@@ -16,5 +16,12 @@ import javax.persistence.Id;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserNonce {
     @Id private String address;
+    private String account;
     private String nonce;
+
+    public void UserNonce(String address, String nonce) {
+        this.address = address;
+        this.nonce = nonce;
+        this.account = null;
+    }
 }

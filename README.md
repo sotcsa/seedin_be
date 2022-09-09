@@ -1,5 +1,10 @@
 # SEED - a web3 career hub
 
+## Swagger
+http://localhost:17641/swagger-ui/index.html
+
+## DB design
+[DRAFT] https://dbdiagram.io/d/63158b620911f91ba535094c
 
 ## Backend-Frontend Authentication
 
@@ -13,16 +18,16 @@ For that we have implemented a one-click-login solution (based on [this tutorial
 ![Alt text](https://uploads.toptal.io/blog/image/125792/toptal-blog-image-1522395353253-70fb1c40e9527154c2774507b63eac63.png "Optional title")
 
 ### Auth endpoints
-#### GET /nonce?address={ethereum_account_address}
+#### GET /auth/nonce?address={ethereum_account_address}
 E.g.
-http://localhost:17641/nonce?address=0x6C542189c4Dbc4d5D7b4845388b8D561f9e2e96B
+http://localhost:17641/auth/nonce?address=0x6C542189c4Dbc4d5D7b4845388b8D561f9e2e96B
 
 Response: raw string, the nonce assigned to the {ethereum_account_address}
 
 Backend generates a UUID string to be used in signed message. Stores in db.
 
 
-#### POST /authenticate
+#### POST /auth/eth
 Request (example):
 ```shell
 {
@@ -33,7 +38,7 @@ Request (example):
 
 E.g.
 ```shell
-curl -X POST 'http://localhost:17641/authenticate' \
+curl -X POST 'http://localhost:17641/auth/eth' \
  -H 'Content-Type: application/json' \
  --data-raw '{
    "publicAddress": "0x6C542189c4Dbc4d5D7b4845388b8D561f9e2e96B",
