@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +23,12 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+enum NetworkType {
+    ETHEREUM,
+    NEAR
+}
+
 
 @RestController
 public class AuthController {
@@ -70,48 +75,40 @@ public class AuthController {
     @CrossOrigin( origins = "http://localhost:63342")
     @PostMapping("/auth/near")
     public ResponseEntity<?> authenticateOnNear(@RequestBody AuthenticationRequest authenticationRequest) {
-        String publicKey = authenticationRequest.getPublicAddress();
-
-        try {
-            if (NearUtil.verifySignature(publicKey, authenticationRequest.getSignature(), getNonce(publicKey))) {
-                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(publicKey, ""));
-            } else {
-                logger.warn("Signed message verification failed for address: {}", publicKey);
-                throw new ResponseStatusException(
-                        HttpStatus.FORBIDDEN, "Signed message verification failed");
-            }
-        }
-        catch (Exception e) {
-            logger.error("Unhandled exception. Reason:", e);
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, "Error during authentication", e);
-        }
-
-        String jwt = "";
-        return ResponseEntity.ok(new AuthenticationResponse(jwt));
+        return authenticate(authenticationRequest, NetworkType.NEAR);
     }
-
 
     @CrossOrigin( origins = "http://localhost:63342")
     @PostMapping("/auth/eth")
     public ResponseEntity<?> authenticateInEthereum(@RequestBody AuthenticationRequest authenticationRequest) {
+        return authenticate(authenticationRequest, NetworkType.ETHEREUM);
+    }
+
+    private ResponseEntity<?> authenticate(AuthenticationRequest authenticationRequest, NetworkType networkType) {
         String publicAddress = authenticationRequest.getPublicAddress();
+        boolean verified = false;
+
         try {
-            if (EthUtil.verifyAddressFromSignature(authenticationRequest, getNonce(publicAddress))) {
-                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(publicAddress, ""));
+            if (networkType == NetworkType.NEAR) {
+                if (NearUtil.verifyAddressFromSignature(authenticationRequest, getNonce(publicAddress))) {
+                    authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(publicAddress, ""));
+                    verified = true;
+                }
+            } else if (networkType == NetworkType.ETHEREUM) {
+                if (EthUtil.verifyAddressFromSignature(authenticationRequest, getNonce(publicAddress))) {
+                    authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(publicAddress, ""));
+                    verified = true;
+                }
             } else {
+                logger.error("No supported network");
+                throw new ResponseStatusException(
+                        HttpStatus.INTERNAL_SERVER_ERROR, "No supported network");
+            }
+            if (!verified) {
                 logger.warn("Signed message verification failed for address: {}", publicAddress);
                 throw new ResponseStatusException(
                         HttpStatus.FORBIDDEN, "Signed message verification failed");
             }
-        }
-        catch (ResponseStatusException e) {
-            throw e;
-        }
-        catch (BadCredentialsException e) {
-            logger.warn("Incorrect username or password", e);
-            throw new ResponseStatusException(
-                    HttpStatus.FORBIDDEN, "Incorrect username or password", e);
         }
         catch (Exception e) {
             logger.error("Unhandled exception. Reason:", e);

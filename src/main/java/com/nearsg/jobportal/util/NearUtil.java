@@ -1,5 +1,6 @@
 package com.nearsg.jobportal.util;
 
+import com.nearsg.jobportal.model.AuthenticationRequest;
 import org.bouncycastle.util.encoders.Base64;
 import software.pando.crypto.nacl.Crypto;
 
@@ -7,6 +8,10 @@ import java.nio.charset.StandardCharsets;
 import java.security.PublicKey;
 
 public class NearUtil {
+
+    public static boolean verifyAddressFromSignature(AuthenticationRequest authenticationRequest, String nonce) {
+        return verifySignature(authenticationRequest.getPublicAddress(), authenticationRequest.getSignature(), nonce);
+    }
 
     public static boolean verifySignature(String publicKey,
                                           String signature,
