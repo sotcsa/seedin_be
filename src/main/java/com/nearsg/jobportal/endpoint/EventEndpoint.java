@@ -56,7 +56,7 @@ public class EventEndpoint {
      * TODO remove this endpoint, only for debugging purpose
      * @return all events
      */
-    @GetMapping("/events")
+    @GetMapping("all")
     public List<Event> getEvents() {
         return eventRepository.findAll();
     }

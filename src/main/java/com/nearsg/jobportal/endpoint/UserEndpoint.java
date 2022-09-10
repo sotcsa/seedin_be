@@ -50,11 +50,22 @@ public class UserEndpoint {
 
     /**
      * TODO remove this endpoint, only for debugging purpose
+     *
      * @return all users
      */
-    @GetMapping("/events")
+    @GetMapping("all")
     public List<User> getUsers() {
         return userRepository.findAll();
+    }
+
+    /**
+     * TODO remove this endpoint, only for debugging purpose
+     *
+     * @return all users
+     */
+    @DeleteMapping("all")
+    public void deleteAll() {
+        userRepository.deleteAll();
     }
 
 }
