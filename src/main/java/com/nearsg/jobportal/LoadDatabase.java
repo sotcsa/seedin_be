@@ -15,8 +15,11 @@ class LoadDatabase {
     @Bean
     CommandLineRunner initDatabase(UserRepository repository) {
         return args -> {
-            log.info("Preloading " + repository.save(new User("Bilbo", "Baggins")));
-            log.info("Preloading " + repository.save(new User("Frodo", "Baggins")));
+            User u = new User("Hope", "Baker");
+            u.setNickName("hope");
+            u.setEthAddress("0x000000000001");
+            u.setAboutMe("Chemical equipment operator");
+            log.info("Preloading " + repository.save(u));
         };
     }
 

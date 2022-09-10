@@ -21,6 +21,10 @@ public class User {
     @Id @GeneratedValue private Long id;
     private String firstName;
     private String lastName;
+    private String nickName;
+    private String aboutMe;
+    private String ethAddress;
+    private String nearAddress;
 
     /**
      * Useful constructor when id is not yet known.
@@ -32,4 +36,9 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
     }
+
+    public User(String ethAddress) {
+        this.ethAddress = ethAddress;
+    }
+
 }

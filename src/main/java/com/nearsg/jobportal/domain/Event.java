@@ -15,21 +15,23 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserAddress {
+public class Event {
     @Id @GeneratedValue private Long id;
-    private String userId;
-    private String addressId;
-    private String type;
-    private boolean visible;
+    private String name;
+    private String description;
+    private String startDate;
+    private String expiryDate;
+
+//    @OneToMany(cascade = CascadeType.ALL)
+//    private List<Badge> badges;
 
     /**
      * Useful constructor when id is not yet known.
      *
+     * @param name
      */
-    public UserAddress(String userId, String addressId, String type) {
-        this.userId = userId;
-        this.addressId = addressId;
-        this.type = type;
-        this.visible = visible;
+    public Event(String name, String description) {
+        this.name = name;
+        this.description = description;
     }
 }

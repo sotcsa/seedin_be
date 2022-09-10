@@ -1,4 +1,4 @@
-package com.nearsg.jobportal;
+package com.nearsg.jobportal.endpoint;
 
 import com.nearsg.jobportal.domain.User;
 import com.nearsg.jobportal.domain.UserNonce;
@@ -6,6 +6,7 @@ import com.nearsg.jobportal.jpa.UserNonceRepository;
 import com.nearsg.jobportal.jpa.UserRepository;
 import com.nearsg.jobportal.model.AuthenticationRequest;
 import com.nearsg.jobportal.model.AuthenticationResponse;
+import com.nearsg.jobportal.model.NetworkType;
 import com.nearsg.jobportal.service.MyUserDetailsService;
 import com.nearsg.jobportal.util.EthUtil;
 import com.nearsg.jobportal.util.JwtUtil;
@@ -20,20 +21,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-enum NetworkType {
-    ETHEREUM,
-    NEAR
-}
-
 
 @RestController
-public class AuthController {
+@RequestMapping("/auth")
+public class AuthEndpoint {
 
-    Logger logger = LoggerFactory.getLogger(AuthController.class);
+    Logger logger = LoggerFactory.getLogger(AuthEndpoint.class);
 
     private final UserRepository userRepository;
 
@@ -45,7 +41,7 @@ public class AuthController {
 
     private final JwtUtil jwtUtil;
 
-    public AuthController(UserRepository userRepository, UserNonceRepository userNonceRepository, AuthenticationManager authenticationManager, MyUserDetailsService userDetailsService, JwtUtil jwtUtil) {
+    public AuthEndpoint(UserRepository userRepository, UserNonceRepository userNonceRepository, AuthenticationManager authenticationManager, MyUserDetailsService userDetailsService, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
         this.userNonceRepository = userNonceRepository;
         this.authenticationManager = authenticationManager;
@@ -53,12 +49,8 @@ public class AuthController {
         this.jwtUtil = jwtUtil;
     }
 
-    @GetMapping("/users")
-    public List<User> users() {
-        return userRepository.findAll();
-    }
 
-    @GetMapping("/auth/nonce")
+    @GetMapping("nonce")
     public ResponseEntity<?> generateNonceForAddress(@RequestParam String address,
                                                      @RequestParam(required = false) String account) {
         Optional<UserNonce> userNonce = userNonceRepository.findById(address);
@@ -72,14 +64,12 @@ public class AuthController {
         return ResponseEntity.ok(nonce);
     }
 
-    @CrossOrigin( origins = "http://localhost:63342")
-    @PostMapping("/auth/near")
+    @PostMapping("near")
     public ResponseEntity<?> authenticateOnNear(@RequestBody AuthenticationRequest authenticationRequest) {
         return authenticate(authenticationRequest, NetworkType.NEAR);
     }
 
-    @CrossOrigin( origins = "http://localhost:63342")
-    @PostMapping("/auth/eth")
+    @PostMapping("eth")
     public ResponseEntity<?> authenticateInEthereum(@RequestBody AuthenticationRequest authenticationRequest) {
         return authenticate(authenticationRequest, NetworkType.ETHEREUM);
     }
@@ -121,6 +111,12 @@ public class AuthController {
 
         // Let's clear user's nonce (avoid reusing nonce, forcing re-sign a new message)
         clearNonce(publicAddress);
+
+        User user = userRepository.findByEthAddress(publicAddress);
+        if (user == null) {
+            user = new User(publicAddress);
+            userRepository.save(user);
+        }
 
         return ResponseEntity.ok(new AuthenticationResponse(jwt));
     }

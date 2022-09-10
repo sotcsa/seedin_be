@@ -11,6 +11,9 @@ import org.web3j.utils.Numeric;
 import java.math.BigInteger;
 import java.util.Arrays;
 
+import static org.springframework.util.StringUtils.hasLength;
+import static org.springframework.util.StringUtils.startsWithIgnoreCase;
+
 public class EthUtil {
 
     private static final String PERSONAL_MESSAGE_PREFIX = "\u0019Ethereum Signed Message:\n";
@@ -60,5 +63,11 @@ public class EthUtil {
         }
 
         return match;
+    }
+
+    public static boolean isEthAddress(String text) {
+        return hasLength(text)
+                && startsWithIgnoreCase(text, "0x")
+                && !text.contains(".");
     }
 }
