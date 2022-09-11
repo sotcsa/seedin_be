@@ -20,6 +20,7 @@ repositories {
 
 dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:3.0.7'
 	compileOnly 'org.projectlombok:lombok'
 	implementation 'com.h2database:h2'
 	implementation 'commons-codec:commons-codec:1.13'
@@ -37,3 +38,7 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+//bootRun {
+//	jvmArgs=["-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"]
+//}

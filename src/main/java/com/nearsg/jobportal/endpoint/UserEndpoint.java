@@ -3,8 +3,8 @@ package com.nearsg.jobportal.endpoint;
 import com.nearsg.jobportal.domain.User;
 import com.nearsg.jobportal.jpa.UserRepository;
 import com.nearsg.jobportal.model.UserRequest;
+import com.nearsg.jobportal.util.EndpointUtil;
 import com.nearsg.jobportal.util.EthUtil;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,9 +37,7 @@ public class UserEndpoint {
     }
 
     private User getUser() {
-        org.springframework.security.core.userdetails.User user =
-                (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String address = user.getUsername();
+        String address = EndpointUtil.getLoggedInAddress();
         if (EthUtil.isEthAddress(address)) {
             return userRepository.findByEthAddress(address);
         } else {

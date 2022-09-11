@@ -20,4 +20,10 @@ public class Badge {
     private String name;
     private Long eventId;
     private Long userId;
+
+    public Badge(String name, Long eventId, Long userId) {
+        this.name = name;
+        this.eventId = eventId;
+        this.userId = userId;
+    }
 }
