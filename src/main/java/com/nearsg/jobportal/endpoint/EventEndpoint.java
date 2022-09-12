@@ -3,6 +3,7 @@ package com.nearsg.jobportal.endpoint;
 import com.nearsg.jobportal.domain.Badge;
 import com.nearsg.jobportal.domain.Event;
 import com.nearsg.jobportal.domain.User;
+import com.nearsg.jobportal.exception.DataNotFound;
 import com.nearsg.jobportal.jpa.BadgeRepository;
 import com.nearsg.jobportal.jpa.EventRepository;
 import com.nearsg.jobportal.jpa.UserRepository;
@@ -38,7 +39,10 @@ public class EventEndpoint {
     @PostMapping()
     public Event save(@RequestBody EventRequest eventRequest) {
         logger.debug("Save a new event with name {}", eventRequest.getName());
-        Event event = new Event(eventRequest.getName(), eventRequest.getDescription());
+        Event event = new Event(eventRequest.getName(),
+                eventRequest.getDescription(),
+                eventRequest.getStartDate(),
+                eventRequest.getExpiryDate());
         return eventRepository.save(event);
     }
 
@@ -65,6 +69,17 @@ public class EventEndpoint {
     public List<Event> getEvents() {
         return eventRepository.findAll();
     }
+
+    /**
+     * Retrieve an event
+     *
+     * @return an events
+     */
+    @GetMapping("{eventId}")
+    public Event getEvent(@PathVariable Long eventId) {
+        return eventRepository.findById(eventId).orElseThrow(DataNotFound::new);
+    }
+
 
     /**
      * TODO it's just a DUMMY implementation, pllease remove it in prod

@@ -1,6 +1,7 @@
 package com.nearsg.jobportal.endpoint;
 
 import com.nearsg.jobportal.domain.User;
+import com.nearsg.jobportal.exception.DataNotFound;
 import com.nearsg.jobportal.jpa.UserRepository;
 import com.nearsg.jobportal.model.UserRequest;
 import com.nearsg.jobportal.util.EndpointUtil;
@@ -21,12 +22,19 @@ public class UserEndpoint {
 
     @GetMapping
     public User loggedInUser() {
-        return getUser();
+        User user= getUser();
+        if (user == null) {
+            throw new DataNotFound();
+        }
+        return user;
     }
 
     @PostMapping
     public User updateUser(@RequestBody UserRequest userRequest) {
         User user = getUser();
+        if (user == null) {
+            throw new DataNotFound();
+        }
 
         user.setAboutMe(userRequest.getAboutMe());
         user.setFirstName(userRequest.getFirstName());
@@ -38,7 +46,10 @@ public class UserEndpoint {
 
     private User getUser() {
         String address = EndpointUtil.getLoggedInAddress();
-        if (EthUtil.isEthAddress(address)) {
+
+        if ("anonymousUser".equalsIgnoreCase(address)) {
+            return null;
+        } else if (EthUtil.isEthAddress(address)) {
             return userRepository.findByEthAddress(address);
         } else {
             return userRepository.findByNearAddress(address);

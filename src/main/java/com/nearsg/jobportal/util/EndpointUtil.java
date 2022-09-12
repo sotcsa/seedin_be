@@ -1,13 +1,18 @@
 package com.nearsg.jobportal.util;
 
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 
 public class EndpointUtil {
 
     public static String getLoggedInAddress() {
-        org.springframework.security.core.userdetails.User user =
-                (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return user.getUsername();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof String) {
+            return (String) principal;
+        } else if (principal instanceof User) {
+            return ((User) principal).getUsername();
+        }
+        return null;
     }
 
 }

@@ -6,4 +6,6 @@ import lombok.Data;
 public class EventRequest {
     String name;
     String description;
+    Long startDate;
+    Long expiryDate;
 }

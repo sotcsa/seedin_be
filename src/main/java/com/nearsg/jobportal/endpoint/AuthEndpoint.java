@@ -2,6 +2,7 @@ package com.nearsg.jobportal.endpoint;
 
 import com.nearsg.jobportal.domain.User;
 import com.nearsg.jobportal.domain.UserNonce;
+import com.nearsg.jobportal.exception.AccessDenied;
 import com.nearsg.jobportal.jpa.UserNonceRepository;
 import com.nearsg.jobportal.jpa.UserRepository;
 import com.nearsg.jobportal.model.AuthenticationRequest;
@@ -13,13 +14,11 @@ import com.nearsg.jobportal.util.JwtUtil;
 import com.nearsg.jobportal.util.NearUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -91,19 +90,16 @@ public class AuthEndpoint {
                 }
             } else {
                 logger.error("No supported network");
-                throw new ResponseStatusException(
-                        HttpStatus.INTERNAL_SERVER_ERROR, "No supported network");
+                throw new AccessDenied("No supported network");
             }
             if (!verified) {
                 logger.warn("Signed message verification failed for address: {}", publicAddress);
-                throw new ResponseStatusException(
-                        HttpStatus.FORBIDDEN, "Signed message verification failed");
+                throw new AccessDenied("Signed message verification failed");
             }
         }
         catch (Exception e) {
             logger.error("Unhandled exception. Reason:", e);
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, "Error during authentication", e);
+            throw new AccessDenied("Error during authentication", e);
         }
 
         final UserDetails userDetails = userDetailsService.loadUserByEthAddress(publicAddress);
