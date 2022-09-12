@@ -19,12 +19,12 @@ import javax.persistence.Id;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Badge {
     @Id
-    @GeneratedValue(generator = "sequence-generator")
+    @GeneratedValue(generator = "badge-sequence-generator")
     @GenericGenerator(
-            name = "sequence-generator",
+            name = "badge-sequence-generator",
             strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
             parameters = {
-                    @Parameter(name = "sequence_name", value = "badge_sequence")
+                @Parameter(name = "sequence_name", value = "badge_sequence")
             }
     )
     private Long id;

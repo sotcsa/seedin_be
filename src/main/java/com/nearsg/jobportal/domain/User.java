@@ -21,12 +21,12 @@ import javax.persistence.Table;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
     @Id
-    @GeneratedValue(generator = "sequence-generator")
+    @GeneratedValue(generator = "user-sequence-generator")
     @GenericGenerator(
-            name = "sequence-generator",
+            name = "user-sequence-generator",
             strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
             parameters = {
-                    @Parameter(name = "sequence_name", value = "user_sequence")
+                @Parameter(name = "sequence_name", value = "user_sequence")
             }
     )
     private Long id;
@@ -44,9 +44,10 @@ public class User {
      * @param firstName
      * @param lastName
      */
-    public User(String firstName, String lastName) {
+    public User(String firstName, String lastName, String ethAddress) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.ethAddress = ethAddress;
     }
 
     public User(String ethAddress) {

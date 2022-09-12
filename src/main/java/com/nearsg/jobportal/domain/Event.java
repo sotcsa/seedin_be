@@ -19,12 +19,12 @@ import javax.persistence.Id;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Event {
     @Id
-    @GeneratedValue(generator = "sequence-generator")
+    @GeneratedValue(generator = "event-sequence-generator")
     @GenericGenerator(
-            name = "sequence-generator",
+            name = "event-sequence-generator",
             strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
             parameters = {
-                    @Parameter(name = "sequence_name", value = "event_sequence")
+                @Parameter(name = "sequence_name", value = "event_sequence")
             }
     )
     private Long id;
