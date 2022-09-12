@@ -25,16 +25,16 @@ class LoadDatabase {
         return args -> {
 
             // Create 3 users
-            User user = new User("Near", "Hacker", "0x000000000001");
+            User user = new User("Near", "Hacker", "0xC6A3dd9e9D73Eb3e66669534Ed21ee169aEd7f14");
             user.setId(1L);
             user.setNickName("ice");
             user.setAboutMe("Web3 Hacker");
             log.info("Created new User: " + userRepository.save(user));
 
-            User user2 = new User("User2", "Hacker", "0x000000000002");
+            User user2 = new User("User2", "Hacker", "0xa485A768CB6DE1DE1e0Fc5AB2b93703a11615c1A");
             log.info("Created new User: {}", userRepository.save(user2));
 
-            User user3 = new User("User3", "Hacker", "0x000000000003");
+            User user3 = new User("User3", "Hacker", "0xAB7ceDa29D292Dd83EC72342F86C3CEd573932cc");
             log.info("Created new User: {}", userRepository.save(user3));
 
 

@@ -61,12 +61,20 @@ public class EventEndpoint {
         return badgeRepository.save(badge);
     }
 
+    @PostMapping("{eventId}/user/{address}")
+    public Badge saveUserClaimForEvent(@PathVariable Long eventId, @PathVariable String address) {
+        logger.debug("Create user badge for an event[{}]", eventId);
+        User user = userRepository.findByEthAddress(address);
+        Badge badge = new Badge("", eventId, user.getId());
+        return badgeRepository.save(badge);
+    }
+
     /**
      * TODO remove this endpoint, only for debugging purpose
      * @return all events
      */
     @GetMapping("all")
-    public List<Event> getEvents() {
+    public List<Event> getAllEvents() {
         return eventRepository.findAll();
     }
 
