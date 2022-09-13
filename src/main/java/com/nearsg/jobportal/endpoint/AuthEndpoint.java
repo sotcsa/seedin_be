@@ -12,6 +12,7 @@ import com.nearsg.jobportal.service.MyUserDetailsService;
 import com.nearsg.jobportal.util.EthUtil;
 import com.nearsg.jobportal.util.JwtUtil;
 import com.nearsg.jobportal.util.NearUtil;
+import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +50,7 @@ public class AuthEndpoint {
     }
 
 
+    @Operation(summary = "Generates nonce for a wallet address")
     @GetMapping("nonce")
     public ResponseEntity<?> generateNonceForAddress(@RequestParam String address,
                                                      @RequestParam(required = false) String account) {
@@ -63,11 +65,13 @@ public class AuthEndpoint {
         return ResponseEntity.ok(nonce);
     }
 
+    @Operation(summary = "Authenticates a user via signed message with MetaMask")
     @PostMapping("near")
     public ResponseEntity<?> authenticateOnNear(@RequestBody AuthenticationRequest authenticationRequest) {
         return authenticate(authenticationRequest, NetworkType.NEAR);
     }
 
+    @Operation(summary = "Authenticates a user via signed message with NEAR wallet")
     @PostMapping("eth")
     public ResponseEntity<?> authenticateInEthereum(@RequestBody AuthenticationRequest authenticationRequest) {
         return authenticate(authenticationRequest, NetworkType.ETHEREUM);

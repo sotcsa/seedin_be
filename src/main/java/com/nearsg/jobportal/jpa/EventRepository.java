@@ -11,4 +11,6 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Query("select u from Badge b left join User u on b.userId = u.id where b.eventId = ?1 ")
     List<User> findUsersByEventId(Long eventId);
+
+    Event findByUuid(String uuid);
 }
