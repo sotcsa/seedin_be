@@ -72,6 +72,6 @@ public class Event {
     }
 
     public String getEventLink() {
-        return "https://seedin.careers/#/event/" + this.uuid + "#/";
+        return "http://seedin.careers/#/event/" + this.uuid + "#/";
     }
 }
